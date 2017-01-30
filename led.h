@@ -8,6 +8,7 @@ struct LED {
   byte state; // 0 for blink, 1 for fade
   int toggleHz;
   int fadeSec;
+  int toggleCnt;
   unsigned long startTime;
 };
 
