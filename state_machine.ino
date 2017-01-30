@@ -1,50 +1,52 @@
-/********TYPEDEF********/
-typedef int COLOR;
-typedef int A_IN; // analog input
-typedef int D_IN; // digital input
+/* 
+ *  currState_machine.ino
+ *  Created by Justin Jo
+ *  Last Modified: Jan 27, 2017
+ */
+
+/********INCLUDES********/
+#include "constants.h"
+#include "led.h"
 
 
-/********CONSTANTS********/
-// output pins
-const COLOR RED    = 8;
-const COLOR GREEN  = 9;
-const COLOR BLUE   = 10;
-const COLOR YELLOW = 11;
+/********VARIABLES********/
+int currState = 0;
+int prevState = 0;
+int diagProblems = 0;
+int analog0 = 0;
 
-// input pins (A0-A7 pots, A8-A15 switches)
-const A_IN POT_1 = 0;
+// timing variable
+unsigned long startMillis;
+unsigned long currMillis;
 
-// constants
-const int ON = 255;
-const int OFF = 0;
-
-// variables
-int state = 0;
-int prev_state = 0;
-int diag_problems = 0;
-int analog_0 = 0;
+// LEDs
+LED red;
+LED blue;
+LED green;
+LED yellow;
 
 
 /********FUNCTION DECLARATIONS********/
 // state functions
-void change_state(int);
-void off_state();
-void on_state();
-void run_state();
-void sleep_state();
-void diagnos_state(int);
-
-// LED behavior functions
-void fade(COLOR,int);
-void pulse(COLOR,int);
+void changeState(int);
+void offState();
+void onState();
+void runState();
+void sleepState();
+void diagnosState(int);
 
 
 /********SETUP********/
 void setup() {
   // put your setup code here, to run once:
-  pinMode(RED,OUTPUT);
-  pinMode(GREEN,OUTPUT);
-  pinMode(BLUE,OUTPUT);
+  pinMode(RED, OUTPUT);
+  pinMode(GREEN, OUTPUT);
+  pinMode(BLUE, OUTPUT);
+  pinMode(YELLOW, OUTPUT);
+  red.pin = RED;
+  green.pin = GREEN;
+  blue.pin = BLUE;
+  yellow.pin = YELLOW;
 
   Serial.begin(9600);
   while (!Serial) {
@@ -53,40 +55,41 @@ void setup() {
   Serial.println("Ready to go...");
 }
 
+
 /********LOOP********/
 void loop() {
   if (Serial.available() > 0) {
     // read the incoming byte:
-    change_state(Serial.parseInt());
+    changeState(Serial.parseInt());
     Serial.print("Received: ");
-    Serial.println(state, DEC);
+    Serial.println(currState, DEC);
 
-    // if switching to diagnosis state
-    if (state == 4) {
+    // if switching to diagnosis currState
+    if (currState == 4) {
       Serial.print("Input # of problems to diagnose: ");
-      while (Serial.available() <= 0) {        
+      while (Serial.available() <= 0) {
       }
-      diag_problems = Serial.parseInt();
-      Serial.println(diag_problems, DEC);
+      diagProblems = Serial.parseInt();
+      Serial.println(diagProblems, DEC);
     }
   }
   
-  switch (state) {
+  switch (currState) {
     case 0:
-      off_state();
+      offState();
       break;
     case 1:
-      on_state();
+      onState();
       break;
     case 2:
-      run_state();
+      runState();
       break;
     case 3:
-      sleep_state();
+      sleepState();
       break;
     case 4:
-      diagnos_state(diag_problems);
-      state = prev_state; // return to previous state
+      diagnosState(diagProblems);
+      currState = prevState; // return to previous currState
       break;
   }
 }
@@ -94,63 +97,84 @@ void loop() {
 
 /********FUNCTION DEFINITIONS********/
 
-void fade(COLOR light, int seconds) {
+/*  changeState
+ *  Changes the current state */
+void changeState(int newState) {
+  prevState = currState;
+  currState = newState;
+}
+
+/* offState
+ * All LEDs off */
+void offState() {
+  analogWrite(RED, 0);
+  analogWrite(GREEN, 0);
+  analogWrite(BLUE, 0);
+  analogWrite(YELLOW, 0);
+}
+
+/*  onState
+ *  Pulse @ 10 Hz  */
+void onState() {
+  currMillis = millis();
+
+  /* reset time upon transition to state */
+  if (currState != prevState) {
+    red.startTime = currMillis;
+    red.brightness = ~0;
+  }
+  
+  analogWrite(red.pin, red.brightness);
+
+  /* toggle LED every 50 ms */
+  if (currMillis - red.startTime > 50) {
+    red.brightness = ~red.brightness;
+    red.startTime = millis();
+  }
+}
+
+/*  runState */
+void runState() {
+  currMillis = millis();
+
+  /* reset time upon transition to state */
+  if (currState != prevState) {
+    startMillis = currMillis;
+    red.startTime = currMillis;
+    blue.startTime = currMillis;
+    yellow.startTime = currMillis;
+  }
+  
+  /*fade(GREEN,6);
+  
   int brightness = 255;
   while (brightness) {
     analogWrite(light,brightness);
     delay(seconds*1000/255); // to ensure 6 sec time constant
     brightness--;
   }
-}
-
-void pulse(COLOR light, int hz) {
-  analogWrite(light,ON);
-  delay(1000/hz/2);
-  analogWrite(light,OFF);
-  delay(1000/hz/2);
-}
-
-
-void change_state(int new_state) {
-  prev_state = state;
-  state = new_state;
-}
-
-void off_state() {
-  analogWrite(BLUE,OFF);
-  analogWrite(GREEN,OFF);
-  analogWrite(RED,OFF);
-  analogWrite(YELLOW,OFF);
-}
-
-void on_state() {
-  pulse(RED,10);
-}
-
-void run_state() {
-  fade(GREEN,6);
-
+  
   // duty cycle
   for (int i=0; i<2; i++) {
-    pulse(GREEN,2);
+    //pulse(GREEN,2);
   }
 
   // interrupts
-  
+  */
 }
 
-void sleep_state() {
+void sleepState() {
   for (int i=0; i<4; i++) {
-    pulse(BLUE,4);
+    //pulse(BLUE,4);
   }
 
-  fade(BLUE,1);
-  change_state(0);
+  //fade(BLUE,1);
+  changeState(0);
 }
 
-void diagnos_state(int problems) {
+void diagnosState(int problems) {
   for (int i=0; i<problems; i++) {
-    pulse(RED,1);
+    //pulse(RED,1);
   }
 }
 
