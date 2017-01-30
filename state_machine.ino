@@ -38,7 +38,7 @@ void diagnosState(int);
 
 /********SETUP********/
 void setup() {
-  // put your setup code here, to run once:
+  // set up LED pins
   pinMode(RED, OUTPUT);
   pinMode(GREEN, OUTPUT);
   pinMode(BLUE, OUTPUT);
@@ -48,6 +48,7 @@ void setup() {
   blue.pin = BLUE;
   yellow.pin = YELLOW;
 
+  // set up serial communication
   Serial.begin(9600);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
@@ -121,14 +122,22 @@ void onState() {
   /* reset time upon transition to state */
   if (currState != prevState) {
     red.startTime = currMillis;
-    red.brightness = ~0;
+    red.maxLux = ~0;
+    red.lux = maxLux;
+    red.state = BLINK;
+    red.toggleHz = 10;
   }
   
   analogWrite(red.pin, red.brightness);
 
-  /* toggle LED every 50 ms */
-  if (currMillis - red.startTime > 50) {
-    red.brightness = ~red.brightness;
+  /* toggle LED every x ms, where x = 500ms/toggle hz */
+  if (currMillis - red.startTime > 500/red.toggleHz) {
+    if (red.lux) {
+      red.lex = 0;
+    }
+    else {
+      red.lux = red.maxLux;
+    }
     red.startTime = millis();
   }
 }

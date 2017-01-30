@@ -19,4 +19,8 @@ const A_IN POT_1 = A0;
 const A_IN SWTCH_1 = A8;
 const A_IN SWTCH_2 = A9;
 
+// LED modes
+const byte BLINK = 0;
+const byte FADE  = 1;
+
 #endif
