@@ -15,9 +15,10 @@ const COLOR BLUE   = 10;
 const COLOR YELLOW = 11;
 
 // input pins (A0-A7 pots, A8-A15 switches)
-const A_IN POT_1 = A0;
-const A_IN SWTCH_1 = A8;
-const A_IN SWTCH_2 = A9;
+const A_IN POT_0 = A0;
+const A_IN POT_1 = A1;
+const A_IN SWTCH_0 = A8;
+const A_IN SWTCH_1 = A9;
 
 // LED modes
 const byte OFF   = 0;

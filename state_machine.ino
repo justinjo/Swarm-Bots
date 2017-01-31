@@ -54,6 +54,11 @@ void setup() {
   blue.pin = BLUE;
   yellow.pin = YELLOW;
 
+  pinMode(POT_0, INPUT);
+  pinMode(POT_1, INPUT);
+  pinMode(SWTCH_0, INPUT);
+  pinMode(SWTCH_1, INPUT);
+
   // set up serial communication
   Serial.begin(9600);
   while (!Serial) {
@@ -139,23 +144,33 @@ void runState() {
   if (isTransition) {     /* reset behavior */
     setupLED(&green, ~0, ~0, FADE, 2, 6, 0);
     setupLED(&blue, ~0, ~0, PULSE, 1, 0, 0);
-    setupLED(&yellow, ~0, ~0, OFF, 0, 0, 0);
+    //setupLED(&yellow, ~0, ~0, OFF, 0, 0, 0);
+    isTransition = false;
   }
+
+  analogPot0 = analogRead(POT_0);
+  analogPot1 = analogRead(POT_1);
+
+  runFlag0 = analogRead(SWTCH_0) > 512;
+  runFlag1 = analogRead(SWTCH_1) > 512;
   
   switch(green.state) {
     case FADE:
       fade(&green);
-      if (green.lux = 0) {
+      if (green.lux == 0) {
         green.state = PULSE;
         green.lux = ~0;
       }
       break;
     case PULSE:
       pulse(&green);
+      if (green.toggleCnt > 2) {
+        green.state = FADE;
+        green.lux = ~0;
+        green.toggleCnt = 0;
+      }
       break;
   }
-
-  pulse(&blue);
 
   // take care of switches -> will change this to interrupts at some point
   if (runFlag0) {   // switch 1
@@ -169,14 +184,15 @@ void runState() {
       analogWrite(red.pin, 0);
     }
   }
+  pulse(&blue);
 
   // potentiometers change the flash pattern and brightness of the yellow LED
   // high potentiometer value -> faster, brighter
   // low potentiometer value -> slower, dimmer
   // flash pattern range: 1 hz to 10 hz [(0 to 9) + 1]
-  // brightness range:    128 to 255    [(0 to 127) + 128]
+  // brightness range:    0 to 255    [(0 to 255) + 0]
   yellow.toggleHz = analogPot0*9/1023+1;
-  yellow.maxLux  = analogPot1*127/1023+128;
+  yellow.maxLux  = analogPot1*255/1023;
   pulse(&yellow);
 }
 
@@ -216,9 +232,9 @@ void diagnosState(int problems) {
 
   if (red.toggleCnt >= problems) {
     currState = prevState; // return to previous state
+    resetLEDs();
   }
 }
-
 
 
 
@@ -241,7 +257,7 @@ void setupLED(LED *led, byte lux, byte maxLux, byte state, int hz, int sec, int 
 }
 
 void fade(LED *led) {
-  if (currMillis - led->startTime > 1000/led->maxLux*led->fadeSec) {
+  if (currMillis - led->startTime > 1000*led->fadeSec/led->maxLux) {
     led->lux--;
     led->startTime = millis();
     analogWrite(led->pin, led->lux);
