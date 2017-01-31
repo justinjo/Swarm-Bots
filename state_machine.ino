@@ -13,12 +13,12 @@
 int currState = 0;
 int prevState = 0;
 int diagProblems = 0;
-int analog0 = 0;
+int analogPot0 = 0;
+int analogPot1 = 0;
+unsigned long currMillis;  // timing variable
 bool isTransition = false;
-
-// timing variable
-unsigned long startMillis;
-unsigned long currMillis;
+bool runFlag0 = false;     // set by interrupts, switch 1
+bool runFlag1 = false;     // switch 2
 
 // LEDs
 LED red;
@@ -37,6 +37,9 @@ void sleepState();
 void diagnosState(int);
 
 void resetLEDs();
+void setupLED(LED *,byte,byte,byte,int,int,int);
+void fade(LED *);
+void pulse(LED *);
 
 
 /********SETUP********/
@@ -68,12 +71,11 @@ void loop() {
     Serial.print("Received: ");
     Serial.println(currState, DEC);
 
-    // if switching to diagnosis currState
+    // if switching to diagnosis
     if (currState == 4) {
       analogWrite(red.pin, 255); // use as signal for diagnostic mode
       Serial.print("Input # of problems to diagnose: ");
-      while (Serial.available() <= 0) {
-      }
+      while (Serial.available() <= 0) {}
       diagProblems = Serial.parseInt();
       Serial.println(diagProblems, DEC);
     }
@@ -121,143 +123,103 @@ void offState() {
 void onState() {
   currMillis = millis();
 
-  /* reset time upon transition to state */
+  /* reset behavior upon transition to state */
   if (isTransition) {
-    red.startTime = currMillis;
-    red.maxLux = ~0;
-    red.lux = red.maxLux;
-    red.state = BLINK;
-    red.toggleHz = 10;
+    setupLED(&red, ~0, ~0, PULSE, 10, 0, 0);
     isTransition = false;
   }
 
-  analogWrite(red.pin, red.lux);
-
-  /* toggle LED every x ms, where x = 500ms/toggle hz */
-  if (currMillis - red.startTime > 500/red.toggleHz) {
-    if (red.lux) {
-      red.lux = 0;
-    }
-    else {
-      red.lux = red.maxLux;
-    }
-    red.startTime = millis();
-  }
+  pulse(&red);
 }
 
 /*  runState */
 void runState() {
   currMillis = millis();
 
-  /* reset time upon transition to state */
-  if (isTransition) {
-    startMillis = currMillis;
-    green.startTime = currMillis;
-    blue.startTime = currMillis;
-    yellow.startTime = currMillis;
-
-    green.state = FADE;
-    green.fadeSec = 6;
-    green.toggleHz = 2;
-    green.toggleCnt = 0;
-    green.maxLux = ~0;
-    green.lux = maxLux;
+  if (isTransition) {     /* reset behavior */
+    setupLED(&green, ~0, ~0, FADE, 2, 6, 0);
+    setupLED(&blue, ~0, ~0, PULSE, 1, 0, 0);
+    setupLED(&yellow, ~0, ~0, OFF, 0, 0, 0);
   }
   
-  /*fade(GREEN,6);
-  
-  int brightness = 255;
-  while (brightness) {
-    analogWrite(light,brightness);
-    delay(seconds*1000/255); // to ensure 6 sec time constant
-    brightness--;
-  }
-  
-  // duty cycle
-  for (int i=0; i<2; i++) {
-    //pulse(GREEN,2);
+  switch(green.state) {
+    case FADE:
+      fade(&green);
+      if (green.lux = 0) {
+        green.state = PULSE;
+        green.lux = ~0;
+      }
+      break;
+    case PULSE:
+      pulse(&green);
+      break;
   }
 
-  // interrupts
-  */
+  pulse(&blue);
+
+  // take care of switches -> will change this to interrupts at some point
+  if (runFlag0) {   // switch 1
+    blue.toggleHz = 1;
+    analogWrite(red.pin, 0);
+  } else {
+    blue.toggleHz = 10;
+    if (runFlag1) {  // switch 2
+      analogWrite(red.pin, 255);
+    } else {
+      analogWrite(red.pin, 0);
+    }
+  }
+
+  // potentiometers change the flash pattern and brightness of the yellow LED
+  // high potentiometer value -> faster, brighter
+  // low potentiometer value -> slower, dimmer
+  // flash pattern range: 1 hz to 10 hz [(0 to 9) + 1]
+  // brightness range:    128 to 255    [(0 to 127) + 128]
+  yellow.toggleHz = analogPot0*9/1023+1;
+  yellow.maxLux  = analogPot1*127/1023+128;
+  pulse(&yellow);
 }
 
 void sleepState() {
   currMillis = millis();
   
-  if (isTransition) {
-    blue.startTime = currMillis;
-    blue.maxLux = ~0;
-    blue.lux = blue.maxLux;
-    blue.state = BLINK;
-    blue.fadeSec = 1;
-    blue.toggleHz = 4;
-    blue.toggleCnt = 0;
+  if (isTransition) {   /* reset behavior */
+    setupLED(&blue, ~0, ~0, PULSE, 4, 1, 0);
     isTransition = false;
   }
-  
-  analogWrite(blue.pin, blue.lux);
 
   switch(blue.state) {
-    case BLINK:
-      if (currMillis - blue.startTime > 500/blue.toggleHz) {
-        if (blue.lux) {
-          blue.lux = 0;
-        }
-        else {
-          blue.lux = blue.maxLux;
-          blue.toggleCnt++;
-        }
-        blue.startTime = millis();
-      }
+    case PULSE:
+      pulse(&blue);
       if (blue.toggleCnt > 3) {
         blue.state = FADE;
       }
       break;
     case FADE:
-      if (currMillis - blue.startTime > 1000/255*blue.fadeSec) {
-        blue.lux--;
-        if (blue.lux == 0) {
-          changeState(0);
-        }
-        blue.startTime = millis();
+      fade(&blue);
+      if (blue.lux == 0) {
+        changeState(0);
       }
       break;
   };
-  
-
 }
 
 void diagnosState(int problems) {
   currMillis = millis();
   
-  if (isTransition) {
-    red.startTime = currMillis;
-    red.maxLux = ~0;
-    red.lux = red.maxLux;
-    red.state = BLINK;
-    red.toggleHz = 1;
-    red.toggleCnt = 0;
+  if (isTransition) {   /* reset behavior */
+    setupLED(&red, ~0, ~0, PULSE, 1, 0, 0);
     isTransition = false;
   }
 
-  analogWrite(red.pin, red.lux);
+  pulse(&red);
 
-  if (currMillis - red.startTime > 500/red.toggleHz) {
-    if (red.lux) {
-      red.lux = 0;
-    }
-    else {
-      red.lux = red.maxLux;
-      red.toggleCnt++;
-    }
-    red.startTime = millis();
-  }
-  
   if (red.toggleCnt >= problems) {
-    currState = prevState; // return to previous currState
+    currState = prevState; // return to previous state
   }
 }
+
+
 
 
 void resetLEDs() {
@@ -267,4 +229,35 @@ void resetLEDs() {
   analogWrite(YELLOW, 0);
 }
 
+void setupLED(LED *led, byte lux, byte maxLux, byte state, int hz, int sec, int cnt) {
+  led->lux       = lux;
+  led->maxLux    = maxLux;
+  led->state     = state;
+  led->toggleHz  = hz;
+  led->fadeSec   = sec;
+  led->toggleCnt = cnt;
+  led->startTime = millis();
+  analogWrite(led->pin, led->lux);
+}
 
+void fade(LED *led) {
+  if (currMillis - led->startTime > 1000/led->maxLux*led->fadeSec) {
+    led->lux--;
+    led->startTime = millis();
+    analogWrite(led->pin, led->lux);
+  }
+}
+
+void pulse(LED *led) {
+  /* toggle LED every x ms, where x = 500ms/toggle hz */
+  if (currMillis - led->startTime > 500/led->toggleHz) {
+    if (led->lux) {
+      led->lux = 0;
+    } else {
+      led->lux = led->maxLux;
+      led->toggleCnt++;
+    }
+    led->startTime = millis();
+    analogWrite(led->pin, led->lux);
+  }
+}

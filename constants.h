@@ -20,7 +20,8 @@ const A_IN SWTCH_1 = A8;
 const A_IN SWTCH_2 = A9;
 
 // LED modes
-const byte BLINK = 0;
-const byte FADE  = 1;
+const byte OFF   = 0;
+const byte PULSE = 1;
+const byte FADE  = 2;
 
 #endif
