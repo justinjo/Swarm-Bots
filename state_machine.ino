@@ -1,7 +1,7 @@
 /* 
  *  currState_machine.ino
  *  Created by Justin Jo
- *  Last Modified: Jan 27, 2017
+ *  Last Modified: Feb 14, 2017
  */
 
 /********INCLUDES********/
@@ -29,21 +29,21 @@ LED yellow;
 
 /********FUNCTION DECLARATIONS********/
 // state functions
-void changeState(int);
+void changeState(int newState);
 void offState();
 void onState();
 void runState();
 void sleepState();
-void diagnosState(int);
+void diagnosState(int problems);
 
 void resetLEDs();
-void setupLED(LED *,byte,byte,byte,int,int,int);
-void fade(LED *);
-void pulse(LED *);
+void setupLED(LED *led, byte lux, byte maxLux, byte state, int hz, int sec, int cnt);
+void fade(LED *led);
+void pulse(LED *led);
 
 
 /********SETUP********/
-void setup() {
+void _setup() {
   // set up LED pins
   pinMode(RED, OUTPUT);
   pinMode(GREEN, OUTPUT);
@@ -69,7 +69,7 @@ void setup() {
 
 
 /********LOOP********/
-void loop() {
+void _loop() {
   if (Serial.available() > 0) {
     // read the incoming byte:
     changeState(Serial.parseInt());

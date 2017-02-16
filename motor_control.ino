@@ -1,22 +1,39 @@
-const int S4 = 8;
-const int S1 = 9;
-const int S2 = 10;
-const int S3 = 11;
+const int EN1 = 2;
+const int FWD1 = 3;
+const int REV1 = 4;
+const int EN2 = 5;
+const int REV2 = 6;
+const int FWD2 = 7;
 
 int n = 0;
 int hi = 255;
+int hime = 127;
+int med = 63;
+int melo = 31;
 int lo = 0;
 
-void forward();
-void reverse();
-void brake();
+void fwd_l(int h);
+void fwd_r(int h);
+void rev_l(int h);
+void rev_r(int h);
+void brk_l();
+void brk_r();
+void fwd(int h);
+void rev(int h);
+void lft(int m, int h);
+void rgt(int m, int h);
+void r_180(int h);
+void l_180(int h);
 
 void setup() {
-  pinMode(S1, OUTPUT);
-  pinMode(S2, OUTPUT);
-  pinMode(S3, OUTPUT);
-  pinMode(S4, OUTPUT);
-  
+  pinMode(EN1, OUTPUT);
+  pinMode(EN2, OUTPUT);
+  pinMode(FWD1, OUTPUT);
+  pinMode(REV1, OUTPUT);
+  pinMode(REV2, OUTPUT);
+  pinMode(FWD2, OUTPUT);
+  n = 0;
+ 
   // set up serial communication
   Serial.begin(9600);
   while (!Serial) {
@@ -35,44 +52,161 @@ void loop() {
 
   switch(n) {
     case 0:
-      brake();
+      brk_l();
+      brk_r();
       break;
     case 1:
-      forward();
+      fwd_l(hi);
       break;
     case 2:
-      reverse();
+      rev_l(hi);
+      break;
+    case 3:
+      fwd_r(hi);
+      break;
+    case 4:
+      rev_r(hi);
+      break;
+    case 5:
+      brk_l();
+      break;
+    case 6:
+      brk_r();
+      break;
+    case 10:
+      brk_l();
+      brk_r();
+      break;
+    case 11:
+      fwd(med);
+      break;
+    case 12:
+      rev(med);
+      break;
+    case 13:
+      lft(med,hi);
+      break;
+    case 14:
+      rgt(med,hi);
+      break;
+    case 15:
+      r_180(med);
+      break;
+    case 16:
+      l_180(med);
+      break;
+    default:
       break;
   }
 }
 
 
 
-void forward() {
-  analogWrite(S4, hi);
-  delay(5);
-  analogWrite(S1, hi);
-  delay(5);
+void fwd_l(int h) {
+  analogWrite(EN1, LOW);
+  delay(2);
+  analogWrite(FWD1, h);
+  delay(2);
+  analogWrite(REV1, LOW);
+  delay(2);
+  analogWrite(EN1, hi);
+  delay(2);
+  n = -1;
 }
 
-void reverse() {
-  analogWrite(S2, hi);
-  delay(5);
-  analogWrite(S3, hi);
-  delay(5);
+void rev_l(int h) {
+  analogWrite(EN1, LOW);
+  delay(2);
+  analogWrite(REV1, h);
+  delay(2);
+  analogWrite(FWD1, LOW);
+  delay(2);
+  analogWrite(EN1, hi);
+  delay(2);
+  n = -1;
 }
 
-void brake() {
-  analogWrite(S3, lo);
-  delay(5);
-  analogWrite(S1, lo);
-  delay(5);
-  analogWrite(S2, lo);
-  delay(5);
-  analogWrite(S4, lo);
-  delay(5);
-
+void fwd_r(int h) {
+  analogWrite(EN2, LOW);
+  delay(2);
+  analogWrite(FWD2, h);
+  delay(2);
+  analogWrite(REV2, LOW);
+  delay(2);
+  analogWrite(EN2, hi);
+  delay(2);
+  n = -1;
 }
+
+void rev_r(int h) {
+  analogWrite(EN2, LOW);
+  delay(2);
+  analogWrite(REV2, h);
+  delay(2);
+  analogWrite(FWD2, LOW);
+  delay(2);
+  analogWrite(EN2, hi);
+  delay(2);
+  n = -1;
+}
+
+void brk_l() {
+  analogWrite(EN1, LOW);
+  delay(2);
+  analogWrite(FWD1, LOW);
+  delay(2);
+  analogWrite(REV1, LOW);
+  delay(2);
+  n = -1;
+}
+
+void brk_r() {
+  analogWrite(EN2, LOW);
+  delay(2);
+  analogWrite(REV2, LOW);
+  delay(2);
+  analogWrite(FWD2, LOW);
+  delay(2);
+  n = -1;
+}
+
+void fwd(int h) {
+  fwd_l(h);
+  fwd_r(h);
+}
+
+void rev(int h) {
+  rev_l(h);
+  rev_r(h);
+}
+
+void lft(int m, int h) {
+  fwd_l(m);
+  fwd_r(h);
+}
+
+void rgt(int m, int h) {
+  fwd_l(h);
+  fwd_r(m);
+}
+
+void r_180(int h) {
+  fwd_r(h);
+  rev_l(h);
+  delay(2000);
+  brk_l();
+  brk_r();
+}
+
+void l_180(int h) {
+  fwd_l(h);
+  rev_r(h);
+  delay(2000);
+  brk_l();
+  brk_r();
+}
+
+
 
 
 /*
