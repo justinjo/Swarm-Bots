@@ -25,7 +25,7 @@ void rgt(int m, int h);
 void r_180(int h);
 void l_180(int h);
 
-void setup() {
+void setup2() {
   pinMode(EN1, OUTPUT);
   pinMode(EN2, OUTPUT);
   pinMode(FWD1, OUTPUT);
@@ -42,7 +42,7 @@ void setup() {
   Serial.println("Ready to go...");
 }
 
-void loop() {
+void loop2() {
   if (Serial.available() > 0) {
     // read the incoming byte:
     n = Serial.parseInt();
