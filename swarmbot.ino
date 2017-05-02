@@ -43,6 +43,16 @@ void setup()
 
 void loop()
 {
-  // put your main code here, to run repeatedly:
-  Serial.print("");
+  Serial.println("Enter challenge number.");
+  while (Serial.available() == 0) {}
+  int challenge = Serial.parseInt();
+  Serial.print("Challenge number ");
+  Serial.println(challenge, DEC);
+  
+  Serial.println("Enter bot number.");
+  while (Serial.available() == 0) {}
+  int bot_num = Serial.parseInt();
+  Serial.print("Bot number ");
+  Serial.println(bot_num, DEC);
+  return;
 }
