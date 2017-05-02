@@ -1,8 +1,11 @@
 /* pins.h
  * Definition of pin assignments
+ * A0 - color detection input
  * 2  - setup for comms
  * 5  - comms carrier
- * 8  = front right motor pin
+ * 6  - blue color detection LED
+ * 7  - red color detection LED
+ * 8  - front right motor pin
  * 9  - front left motor pin
  * 10 - back right motor pin
  * 11 - back left motor pin
@@ -37,5 +40,10 @@ const PIN FRONT_R = 8;
 const PIN FRONT_L = 9;
 const PIN BACK_R  = 10;
 const PIN BACK_L  = 11;
+
+/* Color detection pins */
+const PIN PHOTO_D = A0;
+const PIN BLUE_D  = 6;
+const PIN RED_D   = 7;
 
 #endif
