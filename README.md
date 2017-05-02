@@ -22,5 +22,5 @@ Swarmbots/
 +-- swarmbot.ino
 +-- comms.h
 +-- comms.ino
-+-- constants.h
++-- pins.h
 ```
