@@ -3,6 +3,9 @@
  */
 
 #include "pins.h"
+#include "color_sense.h"
+#include "communication.h"
+#include "motor_control.h"
 
 void setup()
 {
