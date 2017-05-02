@@ -30,8 +30,8 @@ extern int read_color()
   set_color(LOW, LOW, LONG_DELAY);
   black = analogRead(PHOTO_D);
 
-  color = (red > 650 && black > 5) ? yellow : black;
-  color = (red > 200) ? red : color;
+  color = (red > 200) ? red : black;
+  color = (red > 650 && black > 5) ? yellow : color;
   color = (red > 70 && blue > 650) ? blue : color;
   
   return color;
