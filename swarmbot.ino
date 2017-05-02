@@ -11,6 +11,8 @@ void setup()
   pinMode(OSC_SETUP_2, OUTPUT);
   pinMode(OSC_CARRIER, OUTPUT);
   pinMode(OSC_ENABLE, OUTPUT);
+  /* comms input pins */
+  pinMode(REC_IN, INPUT);
 
   Serial.begin(9600);
 
