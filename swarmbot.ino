@@ -11,12 +11,17 @@ void setup()
   pinMode(OSC_SETUP_2, OUTPUT);
   pinMode(OSC_CARRIER, OUTPUT);
   pinMode(OSC_ENABLE, OUTPUT);
-  /* comms input pins */
+  /* communications input pins */
   pinMode(REC_IN, INPUT);
   /* LED pins */
   pinMode(RED, OUTPUT);
   pinMode(BLUE, OUTPUT);
   pinMode(GREEN, OUTPUT);
+  /* motor control input pins */
+  pinMode(FRONT_R, OUTPUT);
+  pinMode(FRONT_L, OUTPUT);
+  pinMode(BACK_R, OUTPUT);
+  pinMode(BACK_L, OUTPUT);
 
   Serial.begin(9600);
 
