@@ -1,5 +1,5 @@
-/* constants.h
- * Contains pin assignment and general constants
+/* pins.h
+ * Contains pin assignment
  * 2  - setup for comms
  * 5  - comms carrier
  * 12 - enable for comms
