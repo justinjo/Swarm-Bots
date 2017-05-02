@@ -3,7 +3,6 @@
 Tufts Junior Design Project (EE31)
 
 ## Table of Contents
-======
 * [Swarmbots](#swarmbots)
 * [Table of Contents](#table-of-contents)
 * [Project Description](#project-description)
@@ -17,11 +16,11 @@ A pair of autonomous robots mimicking the detection of land mines. Features path
 
 Directory Structure
 ======
-'''
+```
 Swarmbots/
 +-- README.md
 +-- swarmbot.ino
 +-- comms.h
 +-- comms.ino
 +-- constants.h
-'''
+```
