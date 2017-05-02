@@ -1,4 +1,4 @@
-/* comms.ino
+/* communication.ino
  * Implementation of communication protocols.
  */
 

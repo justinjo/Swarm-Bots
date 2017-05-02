@@ -1,4 +1,4 @@
-/* comms.h
+/* communication.h
  * Definition of communication protocols.
  */
 

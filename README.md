@@ -20,7 +20,9 @@ Directory Structure
 Swarmbots/
 +-- README.md
 +-- swarmbot.ino
-+-- comms.h
-+-- comms.ino
++-- communication.h
++-- communication.ino
++-- motor_control.h
++-- motor_control.ino
 +-- pins.h
 ```
