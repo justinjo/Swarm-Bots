@@ -1,6 +1,27 @@
-# Swarm-Bots
+# Swarmbots
+
 Tufts Junior Design Project (EE31)
 
-A pair of autonomous robots mimicking the detection of land mines.  
+## Table of Contents
+======
+* [Swarmbots](#swarmbots)
+* [Table of Contents](#table-of-contents)
+* [Project Description](#project-description)
+* [Directory Structure](#directory-structure)
 
-Features path and obstacle detection using photo-reflective sensors and land mine detection using a Hall sensor. Communication systems function via sub-fringe ultrasound. 
+Project Description
+======
+
+A pair of autonomous robots mimicking the detection of land mines. Features path and obstacle detection using photo-reflective sensors and land mine detection using a Hall sensor. Communication systems function via sub-fringe ultrasound. 
+
+
+Directory Structure
+======
+'''
+Swarmbots/
++-- README.md
++-- swarmbot.ino
++-- comms.h
++-- comms.ino
++-- constants.h
+'''
