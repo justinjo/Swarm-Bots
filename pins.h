@@ -1,5 +1,5 @@
 /* pins.h
- * Contains pin assignment
+ * Definition of pin assignments
  * 2  - setup for comms
  * 5  - comms carrier
  * 12 - enable for comms

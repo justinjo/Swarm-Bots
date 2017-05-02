@@ -1,5 +1,5 @@
 /* communication.h
- * Definition of communication protocols.
+ * Declaration of communication protocols.
  */
 
 #ifndef comms_h
