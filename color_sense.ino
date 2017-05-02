@@ -4,56 +4,45 @@
 
 #include "color_sense.h"
 
+/********* Constant declarations *********/
+static const int MED = 150;
+static const int HI = 255;
+static const int MED_DELAY = 50;
+static const int LONG_DELAY = 100;
+
+/********* Helper function declaration *********/
+static void set_color(int blue_lum, int red_lum, int delay_time);
+
+/********* Exported function definitions *********/
 extern int read_color()
 {
-  return yellow;
+  int blue, red, yellow, black, color;
+
+  set_color(MED, LOW, LONG_DELAY);
+  blue = analogRead(PHOTO_D);
+  
+  set_color(LOW, HI, MED_DELAY);
+  red = analogRead(PHOTO_D);
+  
+  set_color(MED, HI, MED_DELAY);
+  yellow = analogRead(PHOTO_D);
+  
+  set_color(LOW, LOW, LONG_DELAY);
+  black = analogRead(PHOTO_D);
+
+  color = (red > 650 && black > 5) ? yellow : black;
+  color = (red > 200) ? red : color;
+  color = (red > 70 && blue > 650) ? blue : color;
+  
+  return color;
 }
-/*
- analogWrite(8, 150);
-  analogWrite(9, 0);
-  delay(100);
-  int blue = analogRead(A0);
-  //Serial.println("blue");
-  //Serial.println(blue);
 
-  analogWrite(8, 0);
-  analogWrite(9, 255);
-  delay(50);
-  int red = analogRead(A0);
- //Serial.println("red");
-  //Serial.println(red);
+/********* Helper function definition *********/
+static void set_color(int blue_lum, int red_lum, int delay_time)
+{
+  unsigned long start_delay = millis();
+  analogWrite(BLUE_D, blue_lum);
+  analogWrite(RED_D, red_lum);
+  while (millis() - start_delay < delay_time) {}
+}
 
-  //analogWrite(8, 150);
-  //analogWrite(9, 255);
-  //delay(50);
-  //int yellow = analogRead(A0);
-
-  analogWrite(8, 0);
-  analogWrite(9, 0);
-  delay(100); 
-  int black = analogRead(A0);
- // Serial.println("black");
-  //
-  Serial.println(black);
-
-  if(red > 650 and black > 5){
-      Serial.println("yellow");
-      state = 0;
-  } else if(red > 200){
-      Serial.println("red");
-
-        state = 4;
-
-  } else if(red > 70 and blue > 650){
-      Serial.println("blue");
-      state = 1;
-      onBlue = 1;
-  } else{
-      Serial.println("black");
-      state = 1;
-      //if(state == 1){
-      //    state = 2;
-       //   delay(100);
-       //  state = 4;
-      }
-*/
