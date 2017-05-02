@@ -2,7 +2,7 @@
  * Contains the setup and main loop for the swarmbots.
  */
 
-#include "constants.h"
+#include "pins.h"
 
 void setup()
 {

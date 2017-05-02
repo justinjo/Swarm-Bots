@@ -2,8 +2,8 @@
  * Implementation of communication protocols.
  */
 
-#include "constants.h"
-#include "comms.h"
+#include "pins.h"
+#include "communication.h"
 
 /********* Constant declarations *********/
 static const int MSG_LEN_1 = 200;
