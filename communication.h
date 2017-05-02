@@ -2,8 +2,8 @@
  * Declaration of communication protocols.
  */
 
-#ifndef comms_h
-#define comms_h
+#ifndef communication_h
+#define communication_h
 
 /********* Exported function declarations *********/
 /* Transmission functions */
