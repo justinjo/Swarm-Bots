@@ -11,9 +11,6 @@ typedef enum Color {
 } Color;
 
 /********* Exported function declarations *********/
-extern Color read_color()
-{
-  return yellow
-}
+extern int read_color();
 
 #endif

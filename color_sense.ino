@@ -4,10 +4,11 @@
 
 #include "color_sense.h"
 
-extern Color read_color()
+extern int read_color()
 {
-  analogWrite(
+  return yellow;
 }
+/*
  analogWrite(8, 150);
   analogWrite(9, 0);
   delay(100);
@@ -55,4 +56,4 @@ extern Color read_color()
        //   delay(100);
        //  state = 4;
       }
-
+*/

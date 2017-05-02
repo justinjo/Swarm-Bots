@@ -42,7 +42,7 @@ extern void brake()
   analogWrite(BACK_R, 155);
   analogWrite(FRONT_L, 155);
   unsigned long start_delay = millis();
-  while (millis() - delay_time < BRAKE_DELAY) {}
+  while (millis() - start_delay < BRAKE_DELAY) {}
 }
 
 extern void turn_left()
