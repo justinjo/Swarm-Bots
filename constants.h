@@ -7,8 +7,8 @@
  * 52 - input for comms
  */
 
-#ifndef constants_h
-#define constants_h
+#ifndef pins_h
+#define pins_h
 
 /* TYPEDEF */
 typedef int PIN;
@@ -18,6 +18,11 @@ const PIN OSC_SETUP_1 = 2;
 const PIN OSC_SETUP_2 = 13;
 const PIN OSC_CARRIER = 5;
 const PIN OSC_ENABLE  = 12;
-const PIN REC_IN      = 52;
+const PIN REC_IN      = 22;
+
+/* LED output pins */
+const PIN RED    = 51;
+const PIN BLUE   = 52;
+const PIN YELLOW = 53;
 
 #endif

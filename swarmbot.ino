@@ -13,6 +13,10 @@ void setup()
   pinMode(OSC_ENABLE, OUTPUT);
   /* comms input pins */
   pinMode(REC_IN, INPUT);
+  /* LED pins */
+  pinMode(RED, OUTPUT);
+  pinMode(BLUE, OUTPUT);
+  pinMode(GREEN, OUTPUT);
 
   Serial.begin(9600);
 
