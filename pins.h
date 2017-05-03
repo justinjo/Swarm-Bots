@@ -46,4 +46,7 @@ const PIN PHOTO_D = A0;
 const PIN BLUE_D  = 6;
 const PIN RED_D   = 7;
 
+/********* Exported function declarations *********/
+extern void setup_pins();
+
 #endif
