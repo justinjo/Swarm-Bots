@@ -27,5 +27,10 @@ extern void setup_pins()
   pinMode(PHOTO_D, INPUT);
   pinMode(BLUE_D, OUTPUT);
   pinMode(RED_D, OUTPUT);
+  /* collision detection pins */
+  pinMode(FR_BUMP, INPUT);
+  pinMode(F_BUMP, INPUT);
+  pinMode(FL_BUMP, INPUT);
+  pinMode(R_BUMP, INPUT);
 }
 
