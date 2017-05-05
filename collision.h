@@ -7,7 +7,7 @@
 
 /********* Typedef declarations *********/
 typedef enum Bumper {
-  fr_bump = 1, f_bump = 2, fl_bump = 4, r_bump = 8;
+  fr_bump = 1, f_bump = 2, fl_bump = 4, r_bump = 8
 } Bumper;
 
 /********* Exported function declarations *********/

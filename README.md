@@ -20,6 +20,8 @@ Directory Structure
 Swarmbots/
 +-- README.md
 +-- swarmbot.ino
++-- collision.h
++-- collision.ino
 +-- color_sense.h
 +-- color_sense.ino
 +-- communication.h
