@@ -4,6 +4,7 @@
 
 #include "pins.h"
 #include "routines.h"
+#include "motor_control.h"
 
 void setup()
 {

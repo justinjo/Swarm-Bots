@@ -10,7 +10,6 @@
 extern void halt();
 extern void forward();
 extern void backward();
-extern void brake();
 extern void turn_left();
 extern void turn_right();
 extern void turn_180();

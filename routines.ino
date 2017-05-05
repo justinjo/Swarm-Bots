@@ -27,8 +27,11 @@ extern void challenge2(int bot_num)
 
 extern void diagnostic()
 {
+  Serial.println("Rotating");
+  turn_180();
+  delay(5000);
   //led_test();
-  color_test();
+  //color_test();
   //motor_test();
 }
 

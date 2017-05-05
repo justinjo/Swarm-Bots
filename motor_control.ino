@@ -6,8 +6,7 @@
 static const int STRAIGHT = 50;
 static const int TURN = 164;
 static const int ROTATE = 75;
-static const int BRAKE_DELAY = 250;
-static const int ROTATE_DELAY = 2050;
+static const int ROTATE_DELAY = 775;
  
 /********* Exported function definitions *********/
 /* motion functions */
@@ -35,16 +34,6 @@ extern void backward()
   analogWrite(BACK_L, STRAIGHT);
 }
 
-extern void brake()
-{
-  analogWrite(BACK_L, LOW);
-  analogWrite(FRONT_R, LOW);
-  analogWrite(BACK_R, 155);
-  analogWrite(FRONT_L, 155);
-  unsigned long start_delay = millis();
-  while (millis() - start_delay < BRAKE_DELAY) {}
-}
-
 extern void turn_left()
 {
   analogWrite(FRONT_L, TURN);
@@ -69,4 +58,5 @@ extern void turn_180()
   analogWrite(BACK_R, LOW);
   unsigned long start_delay = millis();
   while(millis() - start_delay < ROTATE_DELAY) {}
+  halt();
 }
