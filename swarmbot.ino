@@ -24,6 +24,7 @@ void setup()
 
 void loop()
 {
+  /*
   Serial.println("Enter challenge number:");
   while (Serial.available() == 0) {}
   int challenge = Serial.parseInt();
@@ -35,5 +36,6 @@ void loop()
   int bot_num = Serial.parseInt();
   Serial.print("Bot number ");
   Serial.println(bot_num, DEC);
-  
+  */
+  debug();
 }
