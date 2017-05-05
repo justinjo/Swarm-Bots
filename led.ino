@@ -5,7 +5,7 @@
  #include "led.h"
 
 /********* Constant declarations *********/
-static const int DELAY = 100;
+static const int DELAY = 500;
 
  /********* Exported function definitions *********/
 extern void led_on(int pin)
@@ -29,6 +29,7 @@ extern void led_blink(int pin, int blinks)
     led_off(pin);
     while (millis() - start_time < DELAY * 2) {}
     blink_count++;
+    start_time = millis();
   }
 }
 
