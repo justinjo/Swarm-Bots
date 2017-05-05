@@ -16,7 +16,7 @@
  * 11 - back left motor pin
  * 12 - enable for comms
  * 13 - setup for comms
- * 22 - input for comms
+ * 50 - input for comms
  * 51 - red LED output
  * 52 - blue LED output
  * 53 = yellow LED output
@@ -33,7 +33,7 @@ const Pin OSC_SETUP_1 = 2;
 const Pin OSC_SETUP_2 = 13;
 const Pin OSC_CARRIER = 5;
 const Pin OSC_ENABLE  = 12;
-const Pin REC_IN      = 22;
+const Pin REC_IN      = 50;
 
 /* LED output pins */
 const Pin RED    = 51;
