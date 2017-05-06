@@ -57,6 +57,9 @@ const Pin F_BUMP  = A2;
 const Pin FL_BUMP = A3;
 const Pin R_BUMP  = A4;
 
+/* Magnet detection pin */
+const Pin HALL = A5;
+
 /********* Exported function declarations *********/
 extern void setup_pins();
 

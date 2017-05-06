@@ -13,7 +13,7 @@ extern void setup_pins()
   pinMode(OSC_CARRIER, OUTPUT);
   pinMode(OSC_ENABLE, OUTPUT);
   /* communications input pin */
-  pinMode(REC_IN, INPUT);
+  pinMode(REC_IN, INPUT);t
   /* LED pins */
   pinMode(RED, OUTPUT);
   pinMode(BLUE, OUTPUT);
@@ -32,5 +32,7 @@ extern void setup_pins()
   pinMode(F_BUMP, INPUT);
   pinMode(FL_BUMP, INPUT);
   pinMode(R_BUMP, INPUT);
+  /* magnet detection pin */
+  pinMode(HALL, INPUT);
 }
 
