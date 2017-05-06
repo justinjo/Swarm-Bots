@@ -48,8 +48,8 @@ const Pin BACK_L  = 11;
 
 /* Color detection pins */
 const Pin PHOTO_D = A0;
-const Pin BLUE_D  = 6;
-const Pin RED_D   = 7;
+const Pin RED_D   = 6;
+const Pin BLUE_D  = 7;
 
 /* Collision detection pins */
 const Pin FR_BUMP = A1;

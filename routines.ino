@@ -8,6 +8,7 @@
 #include "motor_control.h"
 #include "color_sense.h"
 #include "communication.h"
+#include "collision.h"
 
 #define DELAY_1s delay(1000)
 #define DELAY_TURN delay(775/2)
@@ -18,7 +19,9 @@ static void challenge1_bot1();
 static void challenge1_bot2();
 static void challenge2_bot1();
 static void challenge2_bot2();
- */
+static void detect_color(int color);
+static void hit_wall();
+static void follow_path(int color);
 /* led testing */
 static void led_test();
 static void color_test();
@@ -53,7 +56,7 @@ extern void diagnostic()
   //led_test();
   //color_test();
   //motor_test();
-  //photo_test();
+  photo_test();
   //send_test();
   //recv_test();
 }
@@ -62,23 +65,42 @@ extern void diagnostic()
 /********* Helper function definitions *********/
 static void challenge1_bot1()
 {
-  while (read_color() != yellow) {}
-  
+  detect_color(yellow);
   led_on(YELLOW);
-  forward();
-  while (check_bumper() == 0) {}
-
-  halt();
+  hit_wall();
+  
   backward();
-  while (read_color() != red) {}
-
+  detect_color(red);
   led_on(RED);
+  
+  /* path detection on red, search for magnet */
+  halt();
+  /* flash blue led */
+  receive_msg_1();
+
+  /* path detection on red until wall */
+  halt();
+  led_blink(RED, 2);
+  backward();
+  delay(10);
+  turn_180();
+  halt();
+  send_msg_2();
+  receive_msg_4();
+
+  /* path detection on red until yellow */
   
   
 }
 static void challenge1_bot2()
 {
-  recieve_message()
+  receive_msg_2();
+  detect_color(yellow);
+  led_on(YELLOW);
+  hit_wall();
+  backward();
+  detect_color(blue);
+  
 }
 static void challenge2_bot1()
 {
@@ -89,7 +111,18 @@ static void challenge2_bot2()
   
 }
 
+static void detect_color(int color)
+{
+  while (read_color() != color) {}
+  led_on(YELLOW);
+}
 
+static void hit_wall()
+{
+  forward();
+  while (check_bumpers() == 0) {}
+  halt();
+}
 
 
 
@@ -177,6 +210,24 @@ static void motor_test()
 
 static void photo_test()
 {
+  Serial.println("Turning on blue LED...");
+  analogWrite(BLUE_D, 150);
+  int count = 0, reading = 0;
+  int minimum = analogRead(PHOTO_D), maximum = analogRead(PHOTO_D);
+  while (++count < 1000) {
+    delay(100);
+    reading = analogRead(PHOTO_D);
+    minimum = (reading < minimum) ? reading : minimum;
+    maximum = (reading > maximum) ? reading : maximum;
+  }
+  Serial.print("Min: ");
+  Serial.println(minimum, DEC);
+  Serial.print("Max: ");
+  Serial.println(maximum, DEC);
+  
+  /*150, 255
+  led_on(BLUE_D);
+  
   int input = read_color();
   String color;
   color = (input == yellow) ? "Yellow" : "ERROR";
@@ -184,7 +235,7 @@ static void photo_test()
   color = (input == blue) ? "Blue" : color;
   color = (input == black) ? "Black" : color;
   Serial.println(color);
-  DELAY_1s;
+  DELAY_1s;*/
 }
 
 static void send_test()
@@ -206,6 +257,6 @@ static void send_test()
 static void recv_test()
 {
   Serial.println("Expecting message 1");
-  recieve_msg_1();
+  receive_msg_1();
 }
 

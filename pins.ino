@@ -13,7 +13,7 @@ extern void setup_pins()
   pinMode(OSC_CARRIER, OUTPUT);
   pinMode(OSC_ENABLE, OUTPUT);
   /* communications input pin */
-  pinMode(REC_IN, INPUT);t
+  pinMode(REC_IN, INPUT);
   /* LED pins */
   pinMode(RED, OUTPUT);
   pinMode(BLUE, OUTPUT);

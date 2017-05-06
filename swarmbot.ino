@@ -23,12 +23,12 @@ void setup()
 
 void loop()
 {
-  
+  /*
   Serial.println("Enter challenge number:");
   while (Serial.available() == 0) {}
-  int challenge = Serial.parseInt();
+  int challenge_num = Serial.parseInt();
   Serial.print("Challenge number ");
-  Serial.println(challenge, DEC);
+  Serial.println(challenge_num, DEC);
   
   Serial.println("Enter bot number:");
   while (Serial.available() == 0) {}
@@ -36,8 +36,8 @@ void loop()
   Serial.print("Bot number ");
   Serial.println(bot_num, DEC);
 
-  challenge(bot_num, challenge);
+  challenge(bot_num, challenge_num);
+  */
   
-  
-  //diagnostic();
+  diagnostic();
 }
