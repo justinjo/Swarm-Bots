@@ -56,9 +56,17 @@ extern void diagnostic()
   //led_test();
   //color_test();
   //motor_test();
-  photo_test();
+  //photo_test();
   //send_test();
   //recv_test();
+  detect_color(yellow);
+  led_on(YELLOW);
+  hit_wall();
+  led_off(YELLOW);
+  backward();
+  detect_color(red);
+  led_on(RED);
+  halt();
 }
 
 
@@ -68,7 +76,7 @@ static void challenge1_bot1()
   detect_color(yellow);
   led_on(YELLOW);
   hit_wall();
-  
+  led_off(YELLOW);
   backward();
   detect_color(red);
   led_on(RED);
@@ -210,23 +218,29 @@ static void motor_test()
 
 static void photo_test()
 {
-  Serial.println("Turning on blue LED...");
-  analogWrite(BLUE_D, 150);
+  /*
+  Serial.println("Blue LED/Blue Patch");
+  analogWrite(RED_D, 255);
+  //analogWrite(BLUE_D, 150);
+  while (1) {
+    Serial.println(analogRead(PHOTO_D));
+  }
   int count = 0, reading = 0;
   int minimum = analogRead(PHOTO_D), maximum = analogRead(PHOTO_D);
   while (++count < 1000) {
-    delay(100);
+    delay(10);
     reading = analogRead(PHOTO_D);
     minimum = (reading < minimum) ? reading : minimum;
     maximum = (reading > maximum) ? reading : maximum;
+    Serial.println(count, DEC);
   }
   Serial.print("Min: ");
   Serial.println(minimum, DEC);
   Serial.print("Max: ");
   Serial.println(maximum, DEC);
   
-  /*150, 255
-  led_on(BLUE_D);
+  //150, 255
+  led_on(BLUE_D);*/
   
   int input = read_color();
   String color;
@@ -235,7 +249,7 @@ static void photo_test()
   color = (input == blue) ? "Blue" : color;
   color = (input == black) ? "Black" : color;
   Serial.println(color);
-  DELAY_1s;*/
+  DELAY_1s;
 }
 
 static void send_test()

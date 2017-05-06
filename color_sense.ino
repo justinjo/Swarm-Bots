@@ -31,6 +31,16 @@ extern int read_color()
   black_val = analogRead(PHOTO_D);
 
 
+  if (blue_val < 350 || red_val < 55) {
+    color = black;
+  } else if (blue_val < 650) {
+    color = red;
+  } else if (red_val > 400) {
+    color = yellow;
+  } else {
+    color = blue;
+  }
+  /*
   if (blue_val < 200) {
     color = red;
   } else if (red_val < 400) {
@@ -39,7 +49,9 @@ extern int read_color()
     color = blue;
   } else {
     color = yellow;
-  }/*
+  }
+  */
+  /*
   if (red_val > 650 && black_val > 5) {
     color = yellow;
   } else if (red_val > 200) {
