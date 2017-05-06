@@ -60,6 +60,41 @@ extern void diagnostic()
 
 
 /********* Helper function definitions *********/
+static void challenge1_bot1()
+{
+  while (read_color() != yellow) {}
+  
+  led_on(YELLOW);
+  forward();
+  while (check_bumper() == 0) {}
+
+  halt();
+  backward();
+  while (read_color() != red) {}
+
+  led_on(RED);
+  
+  
+}
+static void challenge1_bot2()
+{
+  recieve_message()
+}
+static void challenge2_bot1()
+{
+  
+}
+static void challenge2_bot2()
+{
+  
+}
+
+
+
+
+
+
+
 static void led_test()
 {
   Serial.println("Turning on red LED...");
