@@ -6,6 +6,7 @@
 #include "pins.h"
 #include "led.h"
 #include "motor_control.h"
+#include "color_sense.h"
 
 #define DELAY_1s delay(1000)
 #define DELAY_TURN delay(775/2)
@@ -120,9 +121,10 @@ static void motor_test()
 static void photo_test()
 {
   int input = read_color();
-  String color = (input == yellow) ? "Yellow" : "Black";
+  String color = (input == yellow) ? "Yellow" : "shit";
   color = (input == red) ? "Red" : color;
   color = (input == blue) ? "Blue" : color;
+  color = (input == black) ? "Black" : color;
   Serial.println(color);
   DELAY_1s;
 }

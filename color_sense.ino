@@ -16,24 +16,49 @@ static void set_color(int blue_lum, int red_lum, int delay_time);
 /********* Exported function definitions *********/
 extern int read_color()
 {
-  int blue, red, yellow, black, color;
+  int blue_val, red_val, yellow_val, black_val, color;
 
   set_color(MED, LOW, LONG_DELAY);
-  blue = analogRead(PHOTO_D);
+  blue_val = analogRead(PHOTO_D);
   
   set_color(LOW, HI, MED_DELAY);
-  red = analogRead(PHOTO_D);
+  red_val = analogRead(PHOTO_D);
   
   set_color(MED, HI, MED_DELAY);
-  yellow = analogRead(PHOTO_D);
+  yellow_val = analogRead(PHOTO_D);
   
   set_color(LOW, LOW, LONG_DELAY);
-  black = analogRead(PHOTO_D);
+  black_val = analogRead(PHOTO_D);
 
-  color = (red > 200) ? red : black;
-  color = (red > 650 && black > 5) ? yellow : color;
-  color = (red > 70 && blue > 650) ? blue : color;
-  
+/*
+  if (blue_val < 200) {
+    color = red;
+  } else if (red_val < 400) {
+    color = black;
+  } else if (red_val < 600) {
+    color = blue;
+  } else {
+    color = yellow;
+  }
+*/
+  if (red_val > 650 && black_val > 5) {
+    color = yellow;
+  } else if (red_val > 200) {
+    color = red;
+  } else if (red_val > 70 && blue_val > 650) {
+    color = blue;
+  } else {
+    color = black;
+  }
+  /*
+  Serial.print("Blue: ");
+  Serial.println(blue, DEC);
+  Serial.print("Red: ");
+  Serial.println(red, DEC);
+  Serial.print("Yellow: ");
+  Serial.println(yellow, DEC);
+  Serial.print("Black: ");
+  Serial.println(black, DEC);*/
   return color;
 }
 
