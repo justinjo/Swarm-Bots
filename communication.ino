@@ -65,6 +65,21 @@ extern void receive_msg_4()
   get_message(MSG_LEN_4 + ERROR_LEN);
 }
 
+/* 18kHz signal enable */
+extern void enable_18k()
+{
+  /* 18.523 kHz signal setup, output on pin 5 */
+  TCCR3A = _BV(COM3A0) | _BV(COM3B0) | _BV(WGM30) | _BV(WGM31);
+  TCCR3B = _BV(WGM32) | _BV(WGM33) |  _BV(CS31);
+  OCR3A  = 53;
+}
+extern void disable_18k()
+{
+  TCCR3A = 1;
+  TCCR3B = 3;
+  OCR3A  = 0;
+}
+
 /********* Helper function definitions *********/
 static void get_message(int exp_time)
 {

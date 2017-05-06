@@ -18,4 +18,8 @@ extern void receive_msg_2();
 extern void receive_msg_3();
 extern void receive_msg_4();
 
+/* 18kHz signal enable */
+extern void enable_18k();
+extern void disable_18k();
+
 #endif

@@ -5,6 +5,7 @@
 #include "pins.h"
 #include "routines.h"
 #include "motor_control.h"
+#include "communication.h"
 
 void setup()
 {
@@ -12,10 +13,7 @@ void setup()
 
   Serial.begin(9600);
 
-  /* 18.523 kHz signal setup, output on pin 5 */
-  TCCR3A = _BV(COM3A0) | _BV(COM3B0) | _BV(WGM30) | _BV(WGM31);
-  TCCR3B = _BV(WGM32) | _BV(WGM33) |  _BV(CS31);
-  OCR3A = 53;
+  enable_18k();
 
   /* Let's go! */
   Serial.println("Ready to go...");
