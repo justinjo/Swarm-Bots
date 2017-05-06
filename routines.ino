@@ -7,15 +7,22 @@
 #include "led.h"
 #include "motor_control.h"
 #include "color_sense.h"
+#include "communication.h"
 
 #define DELAY_1s delay(1000)
 #define DELAY_TURN delay(775/2)
 
 /********* Helper function declarations *********/
+/* led testing */
 static void led_test();
 static void color_test();
+/* motor testing */
 static void motor_test();
+/* color detection testing */
 static void photo_test();
+/* comms testing */
+static void send_test();
+static void recv_test();
 
 /********* Exported function definitions *********/
 extern void challenge1(int bot_num)
@@ -33,7 +40,9 @@ extern void diagnostic()
   //led_test();
   //color_test();
   //motor_test();
-  photo_test();
+  //photo_test();
+  //send_test();
+  recv_test();
 }
 
 
@@ -128,5 +137,27 @@ static void photo_test()
   color = (input == black) ? "Black" : color;
   Serial.println(color);
   DELAY_1s;
+}
+
+static void send_test()
+{
+  Serial.println("Sending message 1");
+  send_msg_1();
+  delay(5000);
+  Serial.println("Sending message 2");
+  send_msg_2();
+  delay(5000);
+  Serial.println("Sending message 3");
+  send_msg_3();
+  delay(5000);
+  Serial.println("Sending message 4");
+  send_msg_4();
+  delay(5000);
+}
+
+static void recv_test()
+{
+  Serial.println("Expecting message 1");
+  recieve_msg_1();
 }
 
