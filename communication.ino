@@ -45,22 +45,22 @@ extern void send_msg_4()
 }
 
 /* Returns only when message 1 is detected */
-extern void recieve_msg_1()
+extern void receive_msg_1()
 {
   get_message(MSG_LEN_1 + ERROR_LEN);
 }
 
-extern void recieve_msg_2()
+extern void receive_msg_2()
 {
   get_message(MSG_LEN_2 + ERROR_LEN);
 }
 
-extern void recieve_msg_3()
+extern void receive_msg_3()
 {
   get_message(MSG_LEN_3 + ERROR_LEN);
 }
 
-extern void recieve_msg_4()
+extern void receive_msg_4()
 {
   get_message(MSG_LEN_4 + ERROR_LEN);
 }

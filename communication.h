@@ -13,9 +13,9 @@ extern void send_msg_3();
 extern void send_msg_4();
 
 /* Receiving functions */
-extern void recieve_msg_1();
-extern void recieve_msg_2();
-extern void recieve_msg_3();
-extern void recieve_msg_4();
+extern void receive_msg_1();
+extern void receive_msg_2();
+extern void receive_msg_3();
+extern void receive_msg_4();
 
 #endif
