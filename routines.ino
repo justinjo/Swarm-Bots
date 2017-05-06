@@ -121,7 +121,8 @@ static void motor_test()
 static void photo_test()
 {
   int input = read_color();
-  String color = (input == yellow) ? "Yellow" : "shit";
+  String color;
+  color = (input == yellow) ? "Yellow" : "ERROR";
   color = (input == red) ? "Red" : color;
   color = (input == blue) ? "Blue" : color;
   color = (input == black) ? "Black" : color;

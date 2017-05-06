@@ -3,6 +3,7 @@
  */
 
 #include "collision.h"
+#include "pins.h"
 
 /********* Exported function definitions *********/
 /* reads all the bumper pins and returns a byte denoting which bumpers
