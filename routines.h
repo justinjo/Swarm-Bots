@@ -6,8 +6,7 @@
 #define routines_h
 
 /********* Exported function declarations *********/
-extern void challenge1(int bot_num);
-extern void challenge2(int bot_num);
+extern void challenge(int bot_num, int challenge_num);
 extern void diagnostic();
 
 #endif

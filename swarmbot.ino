@@ -35,6 +35,8 @@ void loop()
   int bot_num = Serial.parseInt();
   Serial.print("Bot number ");
   Serial.println(bot_num, DEC);
+
+  
   */
   diagnostic();
 }

@@ -13,6 +13,12 @@
 #define DELAY_TURN delay(775/2)
 
 /********* Helper function declarations *********/
+/* challenge routines */
+static void challenge1_bot1();
+static void challenge1_bot2();
+static void challenge2_bot1();
+static void challenge2_bot2();
+ */
 /* led testing */
 static void led_test();
 static void color_test();
@@ -25,14 +31,21 @@ static void send_test();
 static void recv_test();
 
 /********* Exported function definitions *********/
-extern void challenge1(int bot_num)
+extern void challenge(int bot_num, int challenge_num)
 {
-  
-}
-
-extern void challenge2(int bot_num)
-{
-  
+  if (challenge_num == 1) {
+    if (bot_num == 1) {
+      challenge1_bot1();
+    } else {
+      challenge1_bot2();
+    }
+  } else {
+    if (bot_num == 1) {
+      challenge2_bot1();
+    } else {
+      challenge2_bot2();
+    }
+  }
 }
 
 extern void diagnostic()
@@ -42,7 +55,7 @@ extern void diagnostic()
   //motor_test();
   //photo_test();
   //send_test();
-  recv_test();
+  //recv_test();
 }
 
 
