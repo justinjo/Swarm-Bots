@@ -99,7 +99,7 @@ static void challenge1_bot1()
   follow_path_end(blue);
 
   /* path detection on red until yellow */
-  while (read_color1() == black) {}
+  while (read_color1() == _black) {}
   led_on(YELLOW);
   hit_wall();
   led_off(YELLOW);
