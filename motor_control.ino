@@ -1,7 +1,7 @@
 /* motor_control.ino
  * Implementation of motor control functions.
  */
- 
+
 /********* Constant declarations *********/
 static const int STRAIGHT = 50;
 static const int TURN = 75;
