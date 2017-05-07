@@ -118,13 +118,16 @@ static void challenge1_bot1()
   follow_path_wall(non_black);
   led_blink(2, RED);
   backward();
-  delay(300);
+  delay(400);
   turn_180();
   halt();
   send_msg_2();
+  delay(300);
+  send_msg_2();
   receive_msg_4();
-  follow_path_wall(non_black);
-  
+  follow_path_end(non_black);
+  halt();
+  while (1) {}
   
 }
 
@@ -185,9 +188,10 @@ static void hit_wall()
 
 static void follow_path_mag(int color)
 {
-  bool right_streak = true;
+  bool right_streak = false;
+  forward();
   while (digitalRead(HALL) == HIGH) {
-    forward();
+    Serial.println(analogRead(PHOTO_D), DEC);
     if (read_color1() != color) {
       /* when off path, turn accordingly to get back on path */
       if (right_streak) {
@@ -198,6 +202,7 @@ static void follow_path_mag(int color)
       delay(250);
       backward();
       delay(100);
+      forward();
       right_streak = !right_streak;
     }
   }
@@ -206,9 +211,9 @@ static void follow_path_mag(int color)
 
 static void follow_path_wall(int color)
 {
-  bool right_streak = false;
+  bool right_streak = true;
+  forward();
   while (check_bumpers() == 0) {
-    forward();
     if (read_color1() != color) {
       /* when off path, turn accordingly to get back on path */
       if (right_streak) {
@@ -219,6 +224,7 @@ static void follow_path_wall(int color)
       delay(250);
       backward();
       delay(100);
+      forward();
       right_streak = !right_streak;
     }
   }
@@ -227,7 +233,24 @@ static void follow_path_wall(int color)
 
 static void follow_path_end(int color)
 {
-  
+  bool right_streak = false;
+  forward();
+  while (check_bumpers() == 0) {
+    if (read_color1() != color) {
+      /* when off path, turn accordingly to get back on path */
+      if (right_streak) {
+        turn_right();
+      } else {
+        turn_left();
+      }
+      delay(250);
+      backward();
+      delay(100);
+      forward();
+      right_streak = !right_streak;
+    }
+  }
+  halt();
 }
 
 
