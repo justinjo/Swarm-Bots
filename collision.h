@@ -3,7 +3,7 @@
  */
 
 #ifndef collision_h
-#define collision_h
+#define collision_h 
 
 /********* Typedef declarations *********/
 typedef enum Bumper {

@@ -12,7 +12,7 @@
 extern byte check_bumpers()
 {
   byte collision = 0;
-  
+
   collision |= (digitalRead(FR_BUMP)) ? fr_bump : collision;
   collision |= (digitalRead(F_BUMP)) ? f_bump : collision;
   collision |= (digitalRead(FL_BUMP)) ? fl_bump : collision;
