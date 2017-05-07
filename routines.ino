@@ -53,20 +53,20 @@ extern void challenge(int bot_num, int challenge_num)
 
 extern void diagnostic()
 {
-  //led_test();
+  led_test();
   //color_test();
   //motor_test();
   //photo_test();
   //send_test();
   //recv_test();
-  detect_color(yellow);
+  /*detect_color(yellow);
   led_on(YELLOW);
   hit_wall();
   led_off(YELLOW);
   backward();
   detect_color(red);
   led_on(RED);
-  halt();
+  halt();*/
 }
 
 
@@ -152,10 +152,11 @@ static void led_test()
   led_off(YELLOW);
   DELAY_1s;
   Serial.println("Blinking each LED");
-  led_blink(RED, 3);
-  led_blink(BLUE, 3);
-  led_blink(YELLOW, 3);
+  led_blink(3, RED);
+  led_blink(3, BLUE);
+  led_blink(3, YELLOW);
   DELAY_1s;
+  led_blink(10, RED, BLUE);
   Serial.println("End led test\n");
 }
 
