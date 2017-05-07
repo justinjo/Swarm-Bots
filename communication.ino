@@ -91,7 +91,7 @@ static void get_message(int exp_time)
   while (!received) {
     /* wait for detection */
     while (digitalRead(REC_IN) != HIGH) {}
-    pulse_count++;
+    pulse_count += (digitalRead(REC_IN) == HIGH) ? 1 : 0;
 
     received = (pulse_count >= lower_bound) && (pulse_count <= upper_bound);
   }
