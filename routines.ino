@@ -20,6 +20,7 @@ static void challenge1_bot2();
 static void challenge2_bot1();
 static void challenge2_bot2();
 static void detect_color(int color);
+static void detect_color1(int color);
 static void hit_wall();
 static void follow_path_mag(int color);
 static void follow_path_wall(int color);
@@ -69,66 +70,53 @@ extern void diagnostic()
 /********* Helper function definitions *********/
 static void challenge1_bot1()
 {
-  /*
-  detect_color(yellow);
+  /* detect yellow patch, light yellow LED, then move to wall */
+  detect_color1(non_black);
   led_on(YELLOW);
   hit_wall();
-  led_off(YELLOW);
-  backward();
-  detect_color(blue);
-  led_on(RED);
-  halt();
-  turn_right();
-  delay(50);
-  halt();
-  // path detection on red, search for magnet 
-  follow_path_mag(blue);
-  led_blink(2, BLUE);
-  send_msg_1();
-  receive_msg_1();
-  // path detection on red until wall
-  follow_path_wall(blue);
-  led_blink(2, RED);
-  backward();
-  delay(10);
-  turn_180();
-  halt();
-  send_msg_2();
-  receive_msg_4();
 
-  follow_path_end(blue);
-
-  /* path detection on red until yellow */
-  while (read_color1() == _black) {}
-  led_on(YELLOW);
-  hit_wall();
+  /* turn off LED and back up until path detected */
   led_off(YELLOW);
   backward();
   delay(200);
-  while (read_color1() != non_black) {}
+  detect_color1(non_black);
+  
+  /* turn on red LED and follow path until landmine */
   led_on(RED);
   halt();
   turn_right();
   delay(300);
   halt();
+  led_off(RED);
   follow_path_mag(non_black);
+
+  /* blink the blue LED twice and message the CCP */
   led_blink(2, BLUE);
   send_msg_1();
+
+  /* wait for CCP to relay message and follow path to the wall */
   receive_msg_1();
   follow_path_wall(non_black);
+
+  /* blink red LED twice, then turn around and signal CCP */
   led_blink(2, RED);
   backward();
   delay(400);
   turn_180();
   halt();
   send_msg_2();
-  delay(300);
-  send_msg_2();
+
+  /* stay still and wait for message from other bot */
   receive_msg_4();
+
+  /* follow the path to its end and find the corner */
   follow_path_end(non_black);
-  halt();
+  backward();
+  delay(400);
+  turn_left();
+  delay(400);
+  hit_wall();
   while (1) {}
-  
 }
 
 static void challenge1_bot2()
@@ -175,8 +163,12 @@ static void challenge2_bot2()
 
 static void detect_color(int color)
 {
+  while (read_color() != color) {}
+}
+
+static void detect_color1(int color)
+{
   while (read_color1() != color) {}
-  led_on(YELLOW);
 }
 
 static void hit_wall()
