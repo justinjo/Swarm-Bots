@@ -83,27 +83,16 @@ extern void disable_18k()
 /********* Helper function definitions *********/
 static void get_message(int exp_time)
 {
-  int pulse_count;
+  int pulse_count = 0;
   int upper_bound = exp_time / 10 + 5;
-  int lower_bound = exp_time / 10 - 5;
-  unsigned long start_time, intermediary;
+  int lower_bound = exp_time / 10 - 5; 
   bool received = false;
   
   while (!received) {
-    pulse_count = 0;
-    start_time = millis();
-    intermediary = start_time;
-
     /* wait for detection */
     while (digitalRead(REC_IN) != HIGH) {}
+    pulse_count++;
 
-    /* record pulse train w/ period 10 ms */
-    while (millis() - start_time > exp_time) {
-      if (millis() - intermediary > 10) {
-        pulse_count += (digitalRead(REC_IN) == HIGH) ? 1 : 0;
-        intermediary = millis();
-      }
-    }
     received = (pulse_count >= lower_bound) && (pulse_count <= upper_bound);
   }
 }
