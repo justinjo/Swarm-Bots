@@ -31,6 +31,7 @@ extern int read_color()
   black_val = analogRead(PHOTO_D);
 
 
+/*
   if (blue_val < 350 || red_val < 55) {
     color = black;
   } else if (blue_val < 650) {
@@ -39,6 +40,16 @@ extern int read_color()
     color = yellow;
   } else {
     color = blue;
+  }
+  */
+  if (blue_val < 90) {
+    color = black;
+  } else if (black_val > 10) {
+    color = yellow;
+  } else if (blue_val < 300) {
+    color = blue;
+  } else {
+    color = red;
   }
   /*
   if (blue_val < 200) {
@@ -71,6 +82,14 @@ extern int read_color()
   Serial.println(yellow, DEC);
   Serial.print("Black: ");
   Serial.println(black, DEC);*/
+  return color;
+}
+
+extern int read_color1()
+{
+  analogWrite(RED_D, HI);
+  int red_val = analogRead(PHOTO_D);
+  int color = (red_val < 900) ? black : non_black;
   return color;
 }
 

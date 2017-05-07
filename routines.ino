@@ -55,19 +55,82 @@ extern void challenge(int bot_num, int challenge_num)
 
 extern void diagnostic()
 {
-  led_test();
+  //led_test();
   //color_test();
   //motor_test();
   //photo_test();
   //send_test();
   //recv_test();
-  //challenge1_bot();
+  challenge1_bot1();
+  //follow_path_wall(non_black);
 }
 
 
 /********* Helper function definitions *********/
 static void challenge1_bot1()
 {
+  /*
+  detect_color(yellow);
+  led_on(YELLOW);
+  hit_wall();
+  led_off(YELLOW);
+  backward();
+  detect_color(blue);
+  led_on(RED);
+  halt();
+  turn_right();
+  delay(50);
+  halt();
+  // path detection on red, search for magnet 
+  follow_path_mag(blue);
+  led_blink(2, BLUE);
+  send_msg_1();
+  receive_msg_1();
+  // path detection on red until wall
+  follow_path_wall(blue);
+  led_blink(2, RED);
+  backward();
+  delay(10);
+  turn_180();
+  halt();
+  send_msg_2();
+  receive_msg_4();
+
+  follow_path_end(blue);
+
+  /* path detection on red until yellow */
+  while (read_color1() == black) {}
+  led_on(YELLOW);
+  hit_wall();
+  led_off(YELLOW);
+  backward();
+  delay(200);
+  while (read_color1() != non_black) {}
+  led_on(RED);
+  halt();
+  turn_right();
+  delay(300);
+  halt();
+  follow_path_mag(non_black);
+  led_blink(2, BLUE);
+  send_msg_1();
+  receive_msg_1();
+  follow_path_wall(non_black);
+  led_blink(2, RED);
+  backward();
+  delay(300);
+  turn_180();
+  halt();
+  send_msg_2();
+  receive_msg_4();
+  follow_path_wall(non_black);
+  
+  
+}
+
+static void challenge1_bot2()
+{
+  receive_msg_2();
   detect_color(yellow);
   led_on(YELLOW);
   hit_wall();
@@ -82,8 +145,8 @@ static void challenge1_bot1()
   /* path detection on red, search for magnet */
   follow_path_mag(red);
   led_blink(2, BLUE);
-  send_msg_1();
-  receive_msg_1();
+  send_msg_3();
+  receive_msg_3();
   /* path detection on red until wall */
   follow_path_wall(red);
   led_blink(2, RED);
@@ -91,45 +154,9 @@ static void challenge1_bot1()
   delay(10);
   turn_180();
   halt();
-  send_msg_2();
-  receive_msg_4();
-
-  follow_path_end(red);
-
-  /* path detection on red until yellow */
-  
-  
-}
-
-static void challenge1_bot2()
-{
-  receive_msg_2();
-  detect_color(yellow);
-  led_on(YELLOW);
-  hit_wall();
-  led_off(YELLOW);
-  backward();
-  detect_color(blue);
-  led_on(RED);
-  halt();
-  turn_right();
-  delay(50);
-  halt();
-  /* path detection on red, search for magnet */
-  follow_path_mag(blue);
-  led_blink(2, BLUE);
-  send_msg_3();
-  receive_msg_3();
-  /* path detection on red until wall */
-  follow_path_wall(blue);
-  led_blink(2, RED);
-  backward();
-  delay(10);
-  turn_180();
-  halt();
   send_msg_4();
 
-  follow_path_end(blue);
+  follow_path_end(red);
   
 }
 
@@ -145,7 +172,7 @@ static void challenge2_bot2()
 
 static void detect_color(int color)
 {
-  while (read_color() != color) {}
+  while (read_color1() != color) {}
   led_on(YELLOW);
 }
 
@@ -158,17 +185,19 @@ static void hit_wall()
 
 static void follow_path_mag(int color)
 {
-  bool right_streak = false;
-  while (digitalRead(HALL) == LOW) {
+  bool right_streak = true;
+  while (digitalRead(HALL) == HIGH) {
     forward();
-    if (read_color() != color) {
+    if (read_color1() != color) {
       /* when off path, turn accordingly to get back on path */
       if (right_streak) {
         turn_right();
       } else {
         turn_left();
       }
-      delay(50);
+      delay(250);
+      backward();
+      delay(100);
       right_streak = !right_streak;
     }
   }
@@ -180,14 +209,16 @@ static void follow_path_wall(int color)
   bool right_streak = false;
   while (check_bumpers() == 0) {
     forward();
-    if (read_color() != color) {
+    if (read_color1() != color) {
       /* when off path, turn accordingly to get back on path */
       if (right_streak) {
         turn_right();
       } else {
         turn_left();
       }
-      delay(50);
+      delay(250);
+      backward();
+      delay(100);
       right_streak = !right_streak;
     }
   }
@@ -281,22 +312,25 @@ static void motor_test()
 
 static void photo_test()
 {
-  /*
+  
   Serial.println("Blue LED/Blue Patch");
   analogWrite(RED_D, 255);
   //analogWrite(BLUE_D, 150);
   while (1) {
     Serial.println(analogRead(PHOTO_D));
   }
-  */
-  int input = read_color();
+  
+  /*
+  int input = read_color1();
   String color;
   color = (input == yellow) ? "Yellow" : "ERROR";
   color = (input == red) ? "Red" : color;
   color = (input == blue) ? "Blue" : color;
   color = (input == black) ? "Black" : color;
+  color = (input == non_black) ? "Non black" : color;
   Serial.println(color);
   DELAY_1s;
+  */
 }
 
 static void send_test()
