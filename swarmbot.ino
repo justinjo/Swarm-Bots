@@ -10,12 +10,7 @@
 void setup()
 {
   setup_pins();
-
   Serial.begin(9600);
-
-  enable_18k();
-
-  /* Let's go! */
   Serial.println("Ready to go...");
 }
 

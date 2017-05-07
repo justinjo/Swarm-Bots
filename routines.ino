@@ -100,6 +100,7 @@ static void challenge1_bot1()
   
   
 }
+
 static void challenge1_bot2()
 {
   receive_msg_2();
@@ -110,13 +111,15 @@ static void challenge1_bot2()
   detect_color(blue);
   
 }
+
 static void challenge2_bot1()
 {
-  
+  motor_test();
 }
+
 static void challenge2_bot2()
 {
-  
+  motor_test();
 }
 
 static void detect_color(int color)
@@ -131,10 +134,6 @@ static void hit_wall()
   while (check_bumpers() == 0) {}
   halt();
 }
-
-
-
-
 
 static void led_test()
 {
@@ -208,9 +207,7 @@ static void motor_test()
   DELAY_1s;
   Serial.println("Moving backward");
   backward();
-  DELAY_1s;
-  DELAY_1s;
-  DELAY_1s;
+  DELAY_1s; DELAY_1s; DELAY_1s;
   halt();
   DELAY_1s;
   Serial.println("End motor test\n");
@@ -225,23 +222,7 @@ static void photo_test()
   while (1) {
     Serial.println(analogRead(PHOTO_D));
   }
-  int count = 0, reading = 0;
-  int minimum = analogRead(PHOTO_D), maximum = analogRead(PHOTO_D);
-  while (++count < 1000) {
-    delay(10);
-    reading = analogRead(PHOTO_D);
-    minimum = (reading < minimum) ? reading : minimum;
-    maximum = (reading > maximum) ? reading : maximum;
-    Serial.println(count, DEC);
-  }
-  Serial.print("Min: ");
-  Serial.println(minimum, DEC);
-  Serial.print("Max: ");
-  Serial.println(maximum, DEC);
-  
-  //150, 255
-  led_on(BLUE_D);*/
-  
+  */
   int input = read_color();
   String color;
   color = (input == yellow) ? "Yellow" : "ERROR";
