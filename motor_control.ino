@@ -7,7 +7,7 @@ static const int STRAIGHT = 50;
 static const int TURN = 75;
 static const int ROTATE = 75;
 static const int ROTATE_DELAY = 775;
- 
+
 /********* Exported function definitions *********/
 /* motion functions */
 extern void halt()

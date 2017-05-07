@@ -21,7 +21,9 @@ static void challenge2_bot1();
 static void challenge2_bot2();
 static void detect_color(int color);
 static void hit_wall();
-static void follow_path(int color);
+static void follow_path_mag(int color);
+static void follow_path_wall(int color);
+static void follow_path_end(int color);
 /* led testing */
 static void led_test();
 static void color_test();
@@ -59,14 +61,7 @@ extern void diagnostic()
   //photo_test();
   //send_test();
   //recv_test();
-  /*detect_color(yellow);
-  led_on(YELLOW);
-  hit_wall();
-  led_off(YELLOW);
-  backward();
-  detect_color(red);
-  led_on(RED);
-  halt();*/
+  //challenge1_bot();
 }
 
 
@@ -80,21 +75,26 @@ static void challenge1_bot1()
   backward();
   detect_color(red);
   led_on(RED);
-  
+  halt();
+  turn_right();
+  delay(50);
+  halt();
   /* path detection on red, search for magnet */
-  halt();
-  /* flash blue led */
+  follow_path_mag(red);
+  led_blink(2, BLUE);
+  send_msg_1();
   receive_msg_1();
-
   /* path detection on red until wall */
-  halt();
-  led_blink(RED, 2);
+  follow_path_wall(red);
+  led_blink(2, RED);
   backward();
   delay(10);
   turn_180();
   halt();
   send_msg_2();
   receive_msg_4();
+
+  follow_path_end(red);
 
   /* path detection on red until yellow */
   
@@ -107,8 +107,29 @@ static void challenge1_bot2()
   detect_color(yellow);
   led_on(YELLOW);
   hit_wall();
+  led_off(YELLOW);
   backward();
   detect_color(blue);
+  led_on(RED);
+  halt();
+  turn_right();
+  delay(50);
+  halt();
+  /* path detection on red, search for magnet */
+  follow_path_mag(blue);
+  led_blink(2, BLUE);
+  send_msg_3();
+  receive_msg_3();
+  /* path detection on red until wall */
+  follow_path_wall(blue);
+  led_blink(2, RED);
+  backward();
+  delay(10);
+  turn_180();
+  halt();
+  send_msg_4();
+
+  follow_path_end(blue);
   
 }
 
@@ -134,6 +155,50 @@ static void hit_wall()
   while (check_bumpers() == 0) {}
   halt();
 }
+
+static void follow_path_mag(int color)
+{
+  bool right_streak = false;
+  while (digitalRead(HALL) == LOW) {
+    forward();
+    if (read_color() != color) {
+      /* when off path, turn accordingly to get back on path */
+      if (right_streak) {
+        turn_right();
+      } else {
+        turn_left();
+      }
+      delay(50);
+      right_streak = !right_streak;
+    }
+  }
+  halt();
+}
+
+static void follow_path_wall(int color)
+{
+  bool right_streak = false;
+  while (check_bumpers() == 0) {
+    forward();
+    if (read_color() != color) {
+      /* when off path, turn accordingly to get back on path */
+      if (right_streak) {
+        turn_right();
+      } else {
+        turn_left();
+      }
+      delay(50);
+      right_streak = !right_streak;
+    }
+  }
+  halt();
+}
+
+static void follow_path_end(int color)
+{
+  
+}
+
 
 static void led_test()
 {
