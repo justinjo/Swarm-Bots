@@ -56,7 +56,16 @@ extern int read_color1()
   analogWrite(BLUE_D, LOW);
   analogWrite(RED_D, HI);
   int red_val = analogRead(PHOTO_D);
-  int color = (red_val < 900) ? _black : non_black;
+  int color = (red_val < 500) ? _black : non_black;
+  return color;
+}
+
+extern int read_color2()
+{
+  analogWrite(BLUE_D, LOW);
+  analogWrite(RED_D, HI);
+  int red_val = analogRead(PHOTO_D);
+  int color = (/*blue_val > 725 || */red_val > 95) ? non_black : _black;
   return color;
 }
 

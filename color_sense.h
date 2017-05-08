@@ -17,5 +17,6 @@ typedef enum Color1 {
 /********* Exported function declarations *********/
 extern int read_color();
 extern int read_color1();
+extern int read_color2();
 
 #endif
