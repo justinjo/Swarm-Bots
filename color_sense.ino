@@ -14,6 +14,7 @@ static const int LONG_DELAY = 100;
 static void set_color(int blue_lum, int red_lum, int delay_time);
 
 /********* Exported function definitions *********/
+/* returns color read by photosensor */
 extern int read_color()
 {
   int blue_val, red_val, yellow_val, black_val, color;
@@ -39,18 +40,12 @@ extern int read_color()
   } else {
     color = red;
   }
-  /*
-  Serial.print("Blue: ");
-  Serial.println(blue, DEC);
-  Serial.print("Red: ");
-  Serial.println(red, DEC);
-  Serial.print("Yellow: ");
-  Serial.println(yellow, DEC);
-  Serial.print("Black: ");
-  Serial.println(black, DEC);*/
+  
   return color;
 }
 
+
+/* specific color reading calibrated to bot 1 */
 extern int read_color1()
 {
   analogWrite(BLUE_D, LOW);
@@ -60,16 +55,18 @@ extern int read_color1()
   return color;
 }
 
+/* specific color reading calibrated to bot 2 */
 extern int read_color2()
 {
   analogWrite(BLUE_D, LOW);
   analogWrite(RED_D, HI);
   int red_val = analogRead(PHOTO_D);
-  int color = (/*blue_val > 725 || */red_val > 95) ? non_black : _black;
+  int color = (red_val > 95) ? non_black : _black;
   return color;
 }
 
 /********* Helper function definition *********/
+/* controls the colored LEDs near the photodetector */
 static void set_color(int blue_lum, int red_lum, int delay_time)
 {
   unsigned long start_delay = millis();

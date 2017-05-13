@@ -15,6 +15,7 @@ static const int ERROR_TRN = 25;
 
 /********* Helper function declarations *********/
 static void get_message(int exp_time);
+static void get_message_err(int exp_time);
 /* control over 18kHz generation */
 static void enable_18k();
 static void disable_18k();
@@ -86,6 +87,38 @@ extern void receive_msg_4()
  */
 /********* Helper function definitions *********/
 static void get_message(int exp_time)
+{
+  int pulse_count;
+  int upper_bound = exp_time / 10 + 5;
+  int lower_bound = exp_time / 10 - 5;
+  unsigned long start_time, intermediary;
+  bool received = false;
+  
+  while (!received) {
+    pulse_count = 0;
+    start_time = millis();
+    intermediary = start_time;
+
+    /* wait for detection */
+    while (digitalRead(REC_IN) != HIGH) {}
+    
+    /* record pulse train w/ period 10 ms */
+    while (millis() - start_time < exp_time * 3) {
+      if (millis() - intermediary > 10) {
+        pulse_count += (digitalRead(REC_IN) == HIGH) ? 1 : 0;
+        intermediary = millis();
+      }
+    }
+    Serial.print(millis() - start_time, DEC);
+    Serial.print(' ');
+    Serial.print(pulse_count, DEC);
+    Serial.print(' ');
+    Serial.println(lower_bound, DEC);
+    received = (pulse_count >= lower_bound) && (pulse_count <= upper_bound);
+  }
+}
+
+static void get_message_err(int exp_time)
 {
   int pulse_count;
   int upper_bound = exp_time / 10 + 25;

@@ -12,6 +12,8 @@
 
 #define DELAY_1s delay(1000)
 #define DELAY_TURN delay(775/2)
+#define BOT_FWD forward();delay(400);halt();delay(100);forward();delay(400);halt();delay(100);backward();delay(200);halt();delay(50);backward();delay(200);halt();delay(50);backward();delay(200);halt();delay(50);
+#define BOT_BKD backward();delay(400);halt();delay(100);backward();delay(400);halt();delay(100);forward();delay(200);halt();delay(50);forward();delay(200);halt();delay(50);forward();delay(200);halt();delay(50);
 
 /********* Helper function declarations *********/
 /* challenge routines */
@@ -29,6 +31,7 @@ static void follow_path_wall1(int color);
 static void follow_path_wall2(int color);
 static void follow_path_end1(int color);
 static void follow_path_end2(int color);
+static bool path_detection(bool right_streak, int color);
 /* led testing */
 static void led_test();
 static void color_test();
@@ -65,10 +68,75 @@ extern void diagnostic()
   //motor_test();
   //photo_test();
   //send_test();
-  recv_test();
+  //recv_test();
   //challenge1_bot1();
   //challenge1_bot2();
-  //follow_path_wall(non_black);
+  //follow_path_end1(non_black);
+  delay(5000);
+  while (1) {
+    salsa(1);
+    //salsa(2);
+  }
+}
+
+extern void salsa(int bot_num) {
+  if (bot_num == 1) {
+    BOT_FWD 
+
+    turn_right();
+    delay(774/4);
+    halt();
+    delay(100);
+
+    BOT_FWD
+
+    turn_left();
+    delay(774/4);
+    halt();
+    delay(100);
+    
+    BOT_FWD
+
+    turn_left();
+    delay(774/4);
+    halt();
+    delay(100);
+
+    BOT_FWD
+    
+    turn_right();
+    delay(774/4);
+    halt();
+    delay(100);
+  } else {
+    BOT_BKD
+
+    turn_left();
+    delay(774/4);
+    halt();
+    delay(100);
+
+    BOT_BKD
+    
+    turn_right();
+    delay(774/4);
+    halt();
+    delay(100);
+
+    BOT_BKD
+
+    turn_right();
+    delay(774/4);
+    halt();
+    delay(100);
+
+    BOT_BKD
+
+    turn_left();
+    delay(774/4);
+    halt();
+    delay(100);
+  }
 }
 
 
@@ -120,10 +188,11 @@ static void challenge1_bot1()
   /* follow the path to its end and find the corner */
   follow_path_end1(non_black);
   backward();
-  delay(400);
+  delay(500);
   turn_left();
   delay(400);
   hit_wall();
+  led_blink(10, BLUE, RED);
   while (1) {}
 }
 
@@ -139,7 +208,7 @@ static void challenge1_bot2()
   /* turn off LED and back up until path detected */
   led_off(YELLOW);
   backward();
-  delay(200);
+  delay(1500);
   detect_color2(non_black);
   
   /* turn on red LED and follow path until landmine */
@@ -177,43 +246,12 @@ static void challenge1_bot2()
   /* follow the path to its end and find the corner */
   follow_path_end2(non_black);
   backward();
-  delay(400);
+  delay(500);
   turn_left();
   delay(400);
   hit_wall();
+  led_blink(10, BLUE, RED);
   while (1) {}
-
-
-
-  
-  receive_msg_2();
-  detect_color(yellow);
-  led_on(YELLOW);
-  hit_wall();
-  led_off(YELLOW);
-  backward();
-  detect_color(red);
-  led_on(RED);
-  halt();
-  turn_right();
-  delay(50);
-  halt();
-  /* path detection on red, search for magnet */
-  follow_path_mag2(red);
-  led_blink(2, BLUE);
-  send_msg_3();
-  receive_msg_3();
-  /* path detection on red until wall */
-  follow_path_wall2(red);
-  led_blink(2, RED);
-  backward();
-  delay(10);
-  turn_180();
-  halt();
-  send_msg_4();
-
-  follow_path_end2(red);
-  
 }
 
 static void challenge2_bot1()
@@ -341,9 +379,12 @@ static void follow_path_wall2(int color)
 
 static void follow_path_end1(int color)
 {
-  bool right_streak = false;
+  bool right_streak = false, found_end = false;
+  unsigned long start_time;
   forward();
-  while (check_bumpers() == 0) {
+
+  while (!found_end) {
+    start_time = millis();
     if (read_color1() != color) {
       /* when off path, turn accordingly to get back on path */
       if (right_streak) {
@@ -351,9 +392,16 @@ static void follow_path_end1(int color)
       } else {
         turn_left();
       }
-      delay(250);
+      /* delay(250); */
+      while (millis() - start_time < 250) {
+        found_end = found_end || check_bumpers() != 0;
+      }
       backward();
       delay(100);
+      /* delay(100); */
+      while (millis() - start_time < 350) {
+        found_end = found_end || check_bumpers() != 0;
+      }
       forward();
       right_streak = !right_streak;
     }
@@ -363,19 +411,29 @@ static void follow_path_end1(int color)
 
 static void follow_path_end2(int color)
 {
-  bool right_streak = true;
+  bool right_streak = false, found_end = false;
+  unsigned long start_time;
   forward();
-  while (check_bumpers() == 0) {
-    if (read_color2() != color) {
+
+  while (!found_end) {
+    start_time = millis();
+    if (read_color1() != color) {
       /* when off path, turn accordingly to get back on path */
       if (right_streak) {
         turn_right();
       } else {
         turn_left();
       }
-      delay(250);
+      /* delay(250); */
+      while (millis() - start_time < 250) {
+        found_end = found_end || check_bumpers() != 0;
+      }
       backward();
       delay(100);
+      /* delay(100); */
+      while (millis() - start_time < 350) {
+        found_end = found_end || check_bumpers() != 0;
+      }
       forward();
       right_streak = !right_streak;
     }
@@ -383,6 +441,25 @@ static void follow_path_end2(int color)
   halt();
 }
 
+static bool path_detection(bool right_streak, int color)
+{
+  int swing_delay = 250;
+  if (read_color1() != color) {
+    /* when off path, turn accordingly to get back on path */
+    if (right_streak) {
+      turn_right();
+    } else {
+      turn_left();
+    }
+    delay(swing_delay);
+    backward();
+    delay(100);
+    forward();
+    right_streak = !right_streak;
+    swing_delay += 100;
+  }
+  return right_streak;
+}
 
 static void led_test()
 {
@@ -543,7 +620,7 @@ static void send_test()
 static void recv_test()
 {
   //Serial.println(digitalRead(REC_IN), DEC);
-  receive_msg_4();
+  receive_msg_2();
   Serial.println("Received");
 }
 
