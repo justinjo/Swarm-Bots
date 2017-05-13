@@ -10,8 +10,10 @@
 #include "communication.h"
 #include "collision.h"
 
+/********* Define statements *********/
 #define DELAY_1s delay(1000)
 #define DELAY_TURN delay(775/2)
+/* movement behavior for salsa dancing */
 #define BOT_FWD forward();delay(400);halt();delay(100);forward();delay(400);halt();delay(100);backward();delay(200);halt();delay(50);backward();delay(200);halt();delay(50);backward();delay(200);halt();delay(50);
 #define BOT_BKD backward();delay(400);halt();delay(100);backward();delay(400);halt();delay(100);forward();delay(200);halt();delay(50);forward();delay(200);halt();delay(50);forward();delay(200);halt();delay(50);
 
@@ -544,7 +546,6 @@ static void motor_test()
 
 static void photo_test()
 {
-  
   //Serial.println("Blue Red Yellow Black");
   analogWrite(RED_D, 255);
   //analogWrite(BLUE_D, 0);
@@ -562,43 +563,6 @@ static void photo_test()
     Serial.println(analogRead(PHOTO_D), DEC);
     //delay(10);
   }
-  
-  /*
-  int input = read_color1();
-  String color;
-  color = (input == yellow) ? "Yellow" : "ERROR";
-  color = (input == red) ? "Red" : color;
-  color = (input == blue) ? "Blue" : color;
-  color = (input == black) ? "Black" : color;
-  color = (input == non_black) ? "Non black" : color;
-  Serial.println(color);
-  DELAY_1s;
-  */
-  /*
-  static const int MED = 150;
-static const int HI = 255;
-static const int MED_DELAY = 50;
-static const int LONG_DELAY = 100;
-extern int read_color()
-{
-  int blue_val, red_val, yellow_val, black_val, color;
-
-  set_color(LOW, HI, MED_DELAY);
-  red_val = analogRead(PHOTO_D);
-  
-  set_color(MED, HI, MED_DELAY);
-  yellow_val = analogRead(PHOTO_D);
-  
-  set_color(LOW, LOW, LONG_DELAY);
-  black_val = analogRead(PHOTO_D);
-
- 
-static void set_color(int blue_lum, int red_lum, int delay_time)
-  unsigned long start_delay = millis();
-  analogWrite(BLUE_D, blue_lum);
-  analogWrite(RED_D, red_lum);
-  while (millis() - start_delay < delay_time) {}
-  */
 }
 
 static void send_test()
